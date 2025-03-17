@@ -115,8 +115,12 @@ match tipo_calculo:
                         Y1 = result[1] + 4.37
                         Z1 = result[2] - 38.52
                         valor = sis.paraWGS84(X1, Y1, Z1)
+                        lat_dms = sis_cart.decimal_to_dms(valor[0])
+                        lon_dms = sis_cart.decimal_to_dms(valor[1])
                         st.markdown('## Resultado')
-                        st.markdown('#### X: '+str(valor[0])+'\n'+'#### Y: '+str(valor[1])+'\n'+'#### Z: '+str(valor[2]))
+                        st.markdown("#### Latitude: {}° {}' {:.10f}''".format(lat_dms[0], lat_dms[1], lat_dms[2])+'\n'+
+                                    "#### Longitude: {}° {}' {:.10f}''".format(lon_dms[0], lon_dms[1], lon_dms[2])+'\n'+
+                                    "#### Altura: {:.4f} m".format(valor[2]))
 
                     if sistema == 1 and sistema2 == 3:
                         result = sis.SAD_69(lon, lat, h)
@@ -124,8 +128,12 @@ match tipo_calculo:
                         Y1 = result[1] + 3.88
                         Z1 = result[2] - 38.22
                         valor = sis.paraSIRGAS(X1, Y1, Z1)
+                        lat_dms = sis_cart.decimal_to_dms(valor[0])
+                        lon_dms = sis_cart.decimal_to_dms(valor[1])
                         st.markdown('## Resultado')
-                        st.markdown('#### X: '+str(valor[0])+'\n'+'#### Y: '+str(valor[1])+'\n'+'#### Z: '+str(valor[2]))
+                        st.markdown("#### Latitude: {}° {}' {:.10f}''".format(lat_dms[0], lat_dms[1], lat_dms[2])+'\n'+
+                                    "#### Longitude: {}° {}' {:.10f}''".format(lon_dms[0], lon_dms[1], lon_dms[2])+'\n'+
+                                    "#### Altura: {:.4f} m".format(valor[2]))
 
                     if sistema == 1 and sistema2 == 4:
                         result = sis.SAD_69(lon, lat, h)
@@ -133,17 +141,24 @@ match tipo_calculo:
                         Y1 = result[1] - 164.40
                         Z1 = result[2] - 34.40
                         valor = sis.paraCORREGO(X1, Y1, Z1)
+                        lat_dms = sis_cart.decimal_to_dms(valor[0])
+                        lon_dms = sis_cart.decimal_to_dms(valor[1])
                         st.markdown('## Resultado')
-                        st.markdown('#### X: '+str(valor[0])+'\n'+'#### Y: '+str(valor[1])+'\n'+'#### Z: '+str(valor[2]))
-
+                        st.markdown("#### Latitude: {}° {}' {:.10f}''".format(lat_dms[0], lat_dms[1], lat_dms[2])+'\n'+
+                                    "#### Longitude: {}° {}' {:.10f}''".format(lon_dms[0], lon_dms[1], lon_dms[2])+'\n'+
+                                    "#### Altura: {:.4f} m".format(valor[2]))
                     if sistema == 2 and sistema2 == 1:
                         result = sis.WGS84(lon, lat, h)
                         X1 = result[0] + 66.87
                         Y1 = result[1] - 4.37
                         Z1 = result[2] + 38.52
                         valor = sis.paraSAD_69(X1, Y1, Z1)
+                        lat_dms = sis_cart.decimal_to_dms(valor[0])
+                        lon_dms = sis_cart.decimal_to_dms(valor[1])
                         st.markdown('## Resultado')
-                        st.markdown('#### X: '+str(valor[0])+'\n'+'#### Y: '+str(valor[1])+'\n'+'#### Z: '+str(valor[2]))
+                        st.markdown("#### Latitude: {}° {}' {:.10f}''".format(lat_dms[0], lat_dms[1], lat_dms[2])+'\n'+
+                                    "#### Longitude: {}° {}' {:.10f}''".format(lon_dms[0], lon_dms[1], lon_dms[2])+'\n'+
+                                    "#### Altura: {:.4f} m".format(valor[2]))
 
                     if sistema == 2 and sistema2 == 2:
                         valor = sis.WGS84(lon, lat, h)
@@ -161,9 +176,13 @@ match tipo_calculo:
                         Y2 = result1[1] + 3.88
                         Z2 = result1[2] - 38.22
                         valor = sis.paraSIRGAS(X2, Y2, Z2)
+                        lat_dms = sis_cart.decimal_to_dms(valor[0])
+                        lon_dms = sis_cart.decimal_to_dms(valor[1])
                         st.markdown('## Resultado')
-                        st.markdown('#### X: '+str(valor[0])+'\n'+'#### Y: '+str(valor[1])+'\n'+'#### Z: '+str(valor[2]))
-
+                        st.markdown("#### Latitude: {}° {}' {:.10f}''".format(lat_dms[0], lat_dms[1], lat_dms[2])+'\n'+
+                                    "#### Longitude: {}° {}' {:.10f}''".format(lon_dms[0], lon_dms[1], lon_dms[2])+'\n'+
+                                    "#### Altura: {:.4f} m".format(valor[2]))
+                        
                     if sistema == 2 and sistema2 == 4:
                         result = sis.WGS84(lon, lat, h)
                         X1 = result[0] + 66.87
@@ -175,8 +194,12 @@ match tipo_calculo:
                         Y2 = result1[0] - 164.40
                         Z2 = Z - 34.40
                         valor = sis.paraCORREGO(X2, Y2, Z2)
+                        lat_dms = sis_cart.decimal_to_dms(valor[0])
+                        lon_dms = sis_cart.decimal_to_dms(valor[1])
                         st.markdown('## Resultado')
-                        st.markdown('#### X: '+str(valor[0])+'\n'+'#### Y: '+str(valor[1])+'\n'+'#### Z: '+str(valor[2]))
+                        st.markdown("#### Latitude: {}° {}' {:.10f}''".format(lat_dms[0], lat_dms[1], lat_dms[2])+'\n'+
+                                    "#### Longitude: {}° {}' {:.10f}''".format(lon_dms[0], lon_dms[1], lon_dms[2])+'\n'+
+                                    "#### Altura: {:.4f} m".format(valor[2]))
 
                     if sistema == 3 and sistema2 == 1:
                         result = sis.SIRGAS(lon, lat, h)
@@ -184,11 +207,15 @@ match tipo_calculo:
                         Y1 = result[1] - 3.88
                         Z1 = result[2] + 38.22
                         valor = sis.paraSAD_69(X1, Y1, Z1)
+                        lat_dms = sis_cart.decimal_to_dms(valor[0])
+                        lon_dms = sis_cart.decimal_to_dms(valor[1])
                         st.markdown('## Resultado')
-                        st.markdown('#### X: '+str(valor[0])+'\n'+'#### Y: '+str(valor[1])+'\n'+'#### Z: '+str(valor[2]))
+                        st.markdown("#### Latitude: {}° {}' {:.10f}''".format(lat_dms[0], lat_dms[1], lat_dms[2])+'\n'+
+                                    "#### Longitude: {}° {}' {:.10f}''".format(lon_dms[0], lon_dms[1], lon_dms[2])+'\n'+
+                                    "#### Altura: {:.4f} m".format(valor[2]))
                         
                     if sistema == 3 and sistema2 == 2:
-                        sis.SIRGAS(lon, lat, h)
+                        result = sis.SIRGAS(lon, lat, h)
                         X1 = result[0] + 67.35
                         Y1 = result[1] - 3.88
                         Z1 = result[2] + 38.22
@@ -198,9 +225,12 @@ match tipo_calculo:
                         Y2 = Y + 4.37
                         Z2 = Z - 38.52
                         valor = sis.paraWGS84(X2, Y2, Z2)
+                        lat_dms = sis_cart.decimal_to_dms(valor[0])
+                        lon_dms = sis_cart.decimal_to_dms(valor[1])
                         st.markdown('## Resultado')
-                        st.markdown('#### X: '+str(valor[0])+'\n'+'#### Y: '+str(valor[1])+'\n'+'#### Z: '+str(valor[2]))
-
+                        st.markdown("#### Latitude: {}° {}' {:.10f}''".format(lat_dms[0], lat_dms[1], lat_dms[2])+'\n'+
+                                    "#### Longitude: {}° {}' {:.10f}''".format(lon_dms[0], lon_dms[1], lon_dms[2])+'\n'+
+                                    "#### Altura: {:.4f} m".format(valor[2]))
                     if sistema == 3 and sistema2 == 3:
                         valor = sis.SIRGAS(lon, lat, h)
                         st.markdown('## Resultado')
@@ -217,17 +247,24 @@ match tipo_calculo:
                         Y2 = Y - 164.40
                         Z2 = Z - 34.40
                         valor = sis.paraCORREGO(X2, Y2, Z2)
+                        lat_dms = sis_cart.decimal_to_dms(valor[0])
+                        lon_dms = sis_cart.decimal_to_dms(valor[1])
                         st.markdown('## Resultado')
-                        st.markdown('#### X: '+str(valor[0])+'\n'+'#### Y: '+str(valor[1])+'\n'+'#### Z: '+str(valor[2]))
-
+                        st.markdown("#### Latitude: {}° {}' {:.10f}''".format(lat_dms[0], lat_dms[1], lat_dms[2])+'\n'+
+                                    "#### Longitude: {}° {}' {:.10f}''".format(lon_dms[0], lon_dms[1], lon_dms[2])+'\n'+
+                                    "#### Altura: {:.4f} m".format(valor[2]))
                     if sistema == 4 and sistema2 == 1:
                         sis.CORREGO(lon, lat, h)
                         X1 = X - 138.70
                         Y1 = Y + 164.40
                         Z1 = Z + 34.40
                         valor = sis.paraSAD_69(X1, Y1, Z1)
+                        lat_dms = sis_cart.decimal_to_dms(valor[0])
+                        lon_dms = sis_cart.decimal_to_dms(valor[1])
                         st.markdown('## Resultado')
-                        st.markdown('#### X: '+str(valor[0])+'\n'+'#### Y: '+str(valor[1])+'\n'+'#### Z: '+str(valor[2]))
+                        st.markdown("#### Latitude: {}° {}' {:.10f}''".format(lat_dms[0], lat_dms[1], lat_dms[2])+'\n'+
+                                    "#### Longitude: {}° {}' {:.10f}''".format(lon_dms[0], lon_dms[1], lon_dms[2])+'\n'+
+                                    "#### Altura: {:.4f} m".format(valor[2]))
 
                     if sistema == 4 and sistema2 == 2:
                         sis.CORREGO(lon, lat, h)
@@ -240,8 +277,12 @@ match tipo_calculo:
                         Y2 = Y + 4.37
                         Z2 = Z - 38.52
                         valor = sis.paraWGS84(X2, Y2, Z2)
+                        lat_dms = sis_cart.decimal_to_dms(valor[0])
+                        lon_dms = sis_cart.decimal_to_dms(valor[1])
                         st.markdown('## Resultado')
-                        st.markdown('#### X: '+str(valor[0])+'\n'+'#### Y: '+str(valor[1])+'\n'+'#### Z: '+str(valor[2]))
+                        st.markdown("#### Latitude: {}° {}' {:.10f}''".format(lat_dms[0], lat_dms[1], lat_dms[2])+'\n'+
+                                    "#### Longitude: {}° {}' {:.10f}''".format(lon_dms[0], lon_dms[1], lon_dms[2])+'\n'+
+                                    "#### Altura: {:.4f} m".format(valor[2]))
 
                     if sistema == 4 and sistema2 == 3:
                         sis.CORREGO(lon, lat, h)
@@ -254,9 +295,13 @@ match tipo_calculo:
                         Y2 = Y + 3.88
                         Z2 = Z - 38.22
                         valor = sis.paraSIRGAS(X2, Y2, Z2)
+                        lat_dms = sis_cart.decimal_to_dms(valor[0])
+                        lon_dms = sis_cart.decimal_to_dms(valor[1])
                         st.markdown('## Resultado')
-                        st.markdown('#### X: '+str(valor[0])+'\n'+'#### Y: '+str(valor[1])+'\n'+'#### Z: '+str(valor[2]))
-
+                        st.markdown("#### Latitude: {}° {}' {:.10f}''".format(lat_dms[0], lat_dms[1], lat_dms[2])+'\n'+
+                                    "#### Longitude: {}° {}' {:.10f}''".format(lon_dms[0], lon_dms[1], lon_dms[2])+'\n'+
+                                    "#### Altura: {:.4f} m".format(valor[2]))
+                        
                     if sistema == 4 and sistema2 == 4:
                         valor = sis.CORREGO(lon, lat, h)
                         st.markdown('## Resultado')
