@@ -10,44 +10,143 @@ tipo_calculo = st.selectbox('Escolha qual sistema você deseja realizar a conver
 
 match tipo_calculo:
     case 'Cartesiano -> Geodésico':
-            # Para Qual sistema? OBS: SAD=1 WGS 84 EPSG:4326=2 SIRGAS 2000 EPSG:4674=3 CORREGO ALEGRE EPSG:4225=4: 
-            sis2_value_text = st.selectbox("Para qual sistema deseja converter?", ('Selecione','SAD 1969 EPSG:4618','WGS 84 EPSG:4326','SIRGAS 2000 EPSG:4674','CORREGO ALEGRE EPSG:4225'))
+            
+            # Qual o atual sistema da coordenada? OBS: SAD=1 WGS 84 EPSG:4326=2 SIRGAS 2000 EPSG:4674=3 CORREGO ALEGRE EPSG:4225=4: 
+            sis_value_text = st.selectbox('Qual o atual sistema da coordenada?', ('Selecione','SAD 1969 EPSG:4618','WGS 84 EPSG:4326','SIRGAS 2000 EPSG:4674','CORREGO ALEGRE EPSG:4225'))
 
-            if sis2_value_text != 'Selecione':
+            if sis_value_text != 'Selecione':
 
-                X = float(st.number_input("insira a Coordenada X: ", format="%0.9f"))
-                Y = float(st.number_input("insira a Coordenada Y: ", format="%0.9f"))
-                Z = float(st.number_input("insira a Coordenada Z: ", format="%0.9f"))
+                # Para Qual sistema? OBS: SAD=1 WGS 84 EPSG:4326=2 SIRGAS 2000 EPSG:4674=3 CORREGO ALEGRE EPSG:4225=4: 
+                sis2_value_text = st.selectbox("Para qual sistema deseja converter?", ('Selecione','SAD 1969 EPSG:4618','WGS 84 EPSG:4326','SIRGAS 2000 EPSG:4674','CORREGO ALEGRE EPSG:4225'))
 
-                botao_cart_to_geodetic = st.button('Converter')
+                if sis2_value_text != 'Selecione':
 
-                if botao_cart_to_geodetic:
+                    X = float(st.number_input("insira a Coordenada X: ", format="%0.9f"))
+                    Y = float(st.number_input("insira a Coordenada Y: ", format="%0.9f"))
+                    Z = float(st.number_input("insira a Coordenada Z: ", format="%0.9f"))
 
-                    match sis2_value_text:
-                        case 'SAD 1969 EPSG:4618':
-                            lat_dms, lon_dms, h = sis_cart.paraSAD_69(X, Y, Z)
-                            st.markdown('## Resultado')
-                            st.markdown("#### Latitude: {}° {}' {:.10f}''".format(lat_dms[0], lat_dms[1], lat_dms[2])+'\n'+
-                                        "#### Longitude: {}° {}' {:.10f}''".format(lon_dms[0], lon_dms[1], lon_dms[2])+'\n'+
-                                        "#### Altura: {:.4f} m".format(h))
-                        case 'WGS 84 EPSG:4326':
-                            lat_dms, lon_dms, h = sis_cart.paraWGS84(X,Y,Z)
-                            st.markdown('## Resultado')
-                            st.markdown("#### Latitude: {}° {}' {:.10f}''".format(lat_dms[0], lat_dms[1], lat_dms[2])+'\n'+
-                                        "#### Longitude: {}° {}' {:.10f}''".format(lon_dms[0], lon_dms[1], lon_dms[2])+'\n'+
-                                        "#### Altura: {:.4f} m".format(h))
-                        case 'SIRGAS 2000 EPSG:4674':
-                            lat_dms, lon_dms, h = sis_cart.paraSIRGAS(X,Y,Z)
-                            st.markdown('## Resultado')
-                            st.markdown("#### Latitude: {}° {}' {:.10f}''".format(lat_dms[0], lat_dms[1], lat_dms[2])+'\n'+
-                                        "#### Longitude: {}° {}' {:.10f}''".format(lon_dms[0], lon_dms[1], lon_dms[2])+'\n'+
-                                        "#### Altura: {:.4f} m".format(h))
-                        case 'CORREGO ALEGRE EPSG:4225':
-                            lat_dms, lon_dms, h = sis_cart.paraCORREGO(X,Y,Z)
-                            st.markdown('## Resultado')
-                            st.markdown("#### Latitude: {}° {}' {:.10f}''".format(lat_dms[0], lat_dms[1], lat_dms[2])+'\n'+
-                                        "#### Longitude: {}° {}' {:.10f}''".format(lon_dms[0], lon_dms[1], lon_dms[2])+'\n'+
-                                        "#### Altura: {:.4f} m".format(h))
+                    botao_cart_to_geodetic = st.button('Converter')
+
+                    if botao_cart_to_geodetic:
+
+                        match (sis_value_text,sis2_value_text):
+                            # Partindo de SAD-69 para outro Sistema
+                            case ('SAD 1969 EPSG:4618','SAD 1969 EPSG:4618'):
+                                lat_dms, lon_dms, h = sis_cart.paraSAD_69(X, Y, Z)
+                                st.markdown('## Resultado')
+                                st.markdown("#### Latitude: {}° {}' {:.10f}''".format(lat_dms[0], lat_dms[1], lat_dms[2])+'\n'+
+                                            "#### Longitude: {}° {}' {:.10f}''".format(lon_dms[0], lon_dms[1], lon_dms[2])+'\n'+
+                                            "#### Altura: {:.4f} m".format(h))
+                            case ('SAD 1969 EPSG:4618','WGS 84 EPSG:4326'):
+                                lat_dms, lon_dms, h = sis_cart.paraWGS84(X-66.86,Y+4.37,Z-38.52)
+                                st.markdown('## Resultado')
+                                st.markdown("#### Latitude: {}° {}' {:.10f}''".format(lat_dms[0], lat_dms[1], lat_dms[2])+'\n'+
+                                            "#### Longitude: {}° {}' {:.10f}''".format(lon_dms[0], lon_dms[1], lon_dms[2])+'\n'+
+                                            "#### Altura: {:.4f} m".format(h))
+                            case ('SAD 1969 EPSG:4618','SIRGAS 2000 EPSG:4674'):
+                                lat_dms, lon_dms, h = sis_cart.paraSIRGAS(X-66.86,Y+4.37,Z-38.52)
+                                st.markdown('## Resultado')
+                                st.markdown("#### Latitude: {}° {}' {:.10f}''".format(lat_dms[0], lat_dms[1], lat_dms[2])+'\n'+
+                                            "#### Longitude: {}° {}' {:.10f}''".format(lon_dms[0], lon_dms[1], lon_dms[2])+'\n'+
+                                            "#### Altura: {:.4f} m".format(h))
+                            case ('SAD 1969 EPSG:4618','CORREGO ALEGRE EPSG:4225'):
+                                lat_dms, lon_dms, h = sis_cart.paraCORREGO(X+138.70,Y-164.40,Z-34.40)
+                                st.markdown('## Resultado')
+                                st.markdown("#### Latitude: {}° {}' {:.10f}''".format(lat_dms[0], lat_dms[1], lat_dms[2])+'\n'+
+                                            "#### Longitude: {}° {}' {:.10f}''".format(lon_dms[0], lon_dms[1], lon_dms[2])+'\n'+
+                                            "#### Altura: {:.4f} m".format(h))
+                            # Partindo de WGS-84 para outro Sistema
+                            case ('WGS 84 EPSG:4326','SAD 1969 EPSG:4618'):
+                                # De WGS84 para SAD-69: soma-se 66.86 no X, subtrai-se 4.37 no Y e soma-se 38.52 no Z
+                                lat_dms, lon_dms, h = sis_cart.paraSAD_69(X + 66.86, Y - 4.37, Z + 38.52)
+                                st.markdown('## Resultado')
+                                st.markdown("#### Latitude: {}° {}' {:.10f}''".format(lat_dms[0], lat_dms[1], lat_dms[2]) + '\n' +
+                                            "#### Longitude: {}° {}' {:.10f}''".format(lon_dms[0], lon_dms[1], lon_dms[2]) + '\n' +
+                                            "#### Altura: {:.4f} m".format(h))
+                            case ('WGS 84 EPSG:4326','WGS 84 EPSG:4326'):
+                                # De WGS84 para WGS84
+                                lat_dms, lon_dms, h = sis_cart.paraWGS84(X, Y, Z)
+                                st.markdown('## Resultado')
+                                st.markdown("#### Latitude: {}° {}' {:.10f}''".format(lat_dms[0], lat_dms[1], lat_dms[2]) + '\n' +
+                                            "#### Longitude: {}° {}' {:.10f}''".format(lon_dms[0], lon_dms[1], lon_dms[2]) + '\n' +
+                                            "#### Altura: {:.4f} m".format(h))
+                            case ('WGS 84 EPSG:4326','SIRGAS 2000 EPSG:4674'):
+                                # Como WGS84 e SIRGAS são equivalentes (a transformação encadeada resultaria em identidade), não há alteração.
+                                lat_dms, lon_dms, h = sis_cart.paraSIRGAS(X, Y, Z)
+                                st.markdown('## Resultado')
+                                st.markdown("#### Latitude: {}° {}' {:.10f}''".format(lat_dms[0], lat_dms[1], lat_dms[2]) + '\n' +
+                                            "#### Longitude: {}° {}' {:.10f}''".format(lon_dms[0], lon_dms[1], lon_dms[2]) + '\n' +
+                                            "#### Altura: {:.4f} m".format(h))
+                            case ('WGS 84 EPSG:4326','CORREGO ALEGRE EPSG:4225'):
+                                # A transformação é encadeada: WGS84 -> SAD-69 (X+66.86, Y-4.37, Z+38.52) e SAD-69 -> Corrego Alegre (X+138.70, Y-164.40, Z-34.40)
+                                # Resultado final: X +205.56, Y -168.77, Z +4.12
+                                lat_dms, lon_dms, h = sis_cart.paraCORREGO(X + 205.56, Y - 168.77, Z + 4.12)
+                                st.markdown('## Resultado')
+                                st.markdown("#### Latitude: {}° {}' {:.10f}''".format(lat_dms[0], lat_dms[1], lat_dms[2]) + '\n' +
+                                            "#### Longitude: {}° {}' {:.10f}''".format(lon_dms[0], lon_dms[1], lon_dms[2]) + '\n' +
+                                            "#### Altura: {:.4f} m".format(h))
+                            # Partindo de SIRGAS para outro Sistema
+                            case ('SIRGAS 2000 EPSG:4674','SAD 1969 EPSG:4618'):
+                                # De SIRGAS para SAD-69: a regra é igual à de WGS84 para SAD-69, ou seja, soma-se 66.86 no X, subtrai-se 4.37 no Y e soma-se 38.52 no Z
+                                lat_dms, lon_dms, h = sis_cart.paraSAD_69(X + 66.86, Y - 4.37, Z + 38.52)
+                                st.markdown('## Resultado')
+                                st.markdown("#### Latitude: {}° {}' {:.10f}''".format(lat_dms[0], lat_dms[1], lat_dms[2]) + '\n' +
+                                            "#### Longitude: {}° {}' {:.10f}''".format(lon_dms[0], lon_dms[1], lon_dms[2]) + '\n' +
+                                            "#### Altura: {:.4f} m".format(h))
+                            case ('SIRGAS 2000 EPSG:4674','WGS 84 EPSG:4326'):
+                                # Encadeamento: SIRGAS -> SAD-69 (X+66.86, Y-4.37, Z+38.52) e depois SAD-69 -> WGS84 (X-66.86, Y+4.37, Z-38.52) resulta na identidade
+                                lat_dms, lon_dms, h = sis_cart.paraWGS84(X, Y, Z)
+                                st.markdown('## Resultado')
+                                st.markdown("#### Latitude: {}° {}' {:.10f}''".format(lat_dms[0], lat_dms[1], lat_dms[2]) + '\n' +
+                                            "#### Longitude: {}° {}' {:.10f}''".format(lon_dms[0], lon_dms[1], lon_dms[2]) + '\n' +
+                                            "#### Altura: {:.4f} m".format(h))
+                            case ('SIRGAS 2000 EPSG:4674','SIRGAS 2000 EPSG:4674'):
+                                # Encadeamento: SIRGAS -> SIRGAS
+                                lat_dms, lon_dms, h = sis_cart.paraSIRGAS(X, Y, Z)
+                                st.markdown('## Resultado')
+                                st.markdown("#### Latitude: {}° {}' {:.10f}''".format(lat_dms[0], lat_dms[1], lat_dms[2]) + '\n' +
+                                            "#### Longitude: {}° {}' {:.10f}''".format(lon_dms[0], lon_dms[1], lon_dms[2]) + '\n' +
+                                            "#### Altura: {:.4f} m".format(h))
+                            case ('SIRGAS 2000 EPSG:4674','CORREGO ALEGRE EPSG:4225'):
+                                # Encadeamento: SIRGAS -> SAD-69 e SAD-69 -> Corrego Alegre, resultando em:
+                                # X +66.86+138.70 = X +205.56, Y -4.37-164.40 = Y -168.77, Z +38.52-34.40 = Z +4.12
+                                lat_dms, lon_dms, h = sis_cart.paraCORREGO(X + 205.56, Y - 168.77, Z + 4.12)
+                                st.markdown('## Resultado')
+                                st.markdown("#### Latitude: {}° {}' {:.10f}''".format(lat_dms[0], lat_dms[1], lat_dms[2]) + '\n' +
+                                            "#### Longitude: {}° {}' {:.10f}''".format(lon_dms[0], lon_dms[1], lon_dms[2]) + '\n' +
+                                            "#### Altura: {:.4f} m".format(h))
+                            # Partindo de Corrego Alegre para outro Sistema
+                            case ('CORREGO ALEGRE EPSG:4225','SAD 1969 EPSG:4618'):
+                                # Inverso de SAD-69 para Corrego Alegre: subtrai-se 138.70 no X, soma-se 164.40 no Y e soma-se 34.40 no Z
+                                lat_dms, lon_dms, h = sis_cart.paraSAD_69(X - 138.70, Y + 164.40, Z + 34.40)
+                                st.markdown('## Resultado')
+                                st.markdown("#### Latitude: {}° {}' {:.10f}''".format(lat_dms[0], lat_dms[1], lat_dms[2]) + '\n' +
+                                            "#### Longitude: {}° {}' {:.10f}''".format(lon_dms[0], lon_dms[1], lon_dms[2]) + '\n' +
+                                            "#### Altura: {:.4f} m".format(h))
+                            case ('CORREGO ALEGRE EPSG:4225','WGS 84 EPSG:4326'):
+                                # Encadeamento: Corrego Alegre -> SAD-69 (inverso de SAD->Corrego: X-138.70, Y+164.40, Z+34.40)
+                                # e SAD-69 -> WGS84 (X-66.86, Y+4.37, Z-38.52):
+                                # Total: X - (138.70+66.86) = X -205.56, Y + (164.40+4.37) = Y +168.77, Z + (34.40-38.52) = Z -4.12
+                                lat_dms, lon_dms, h = sis_cart.paraWGS84(X - 205.56, Y + 168.77, Z - 4.12)
+                                st.markdown('## Resultado')
+                                st.markdown("#### Latitude: {}° {}' {:.10f}''".format(lat_dms[0], lat_dms[1], lat_dms[2]) + '\n' +
+                                            "#### Longitude: {}° {}' {:.10f}''".format(lon_dms[0], lon_dms[1], lon_dms[2]) + '\n' +
+                                            "#### Altura: {:.4f} m".format(h))
+                            case ('CORREGO ALEGRE EPSG:4225','SIRGAS 2000 EPSG:4674'):
+                                # Encadeamento: Corrego Alegre -> SAD-69 e SAD-69 -> SIRGAS resulta em:
+                                # X -205.56, Y +168.77, Z -4.12
+                                lat_dms, lon_dms, h = sis_cart.paraSIRGAS(X - 205.56, Y + 168.77, Z - 4.12)
+                                st.markdown('## Resultado')
+                                st.markdown("#### Latitude: {}° {}' {:.10f}''".format(lat_dms[0], lat_dms[1], lat_dms[2]) + '\n' +
+                                            "#### Longitude: {}° {}' {:.10f}''".format(lon_dms[0], lon_dms[1], lon_dms[2]) + '\n' +
+                                            "#### Altura: {:.4f} m".format(h))
+                            case ('CORREGO ALEGRE EPSG:4225','CORREGO ALEGRE EPSG:4225'):
+                                # Encadeamento: Corrego Alegre -> Corrego Alegre
+                                lat_dms, lon_dms, h = sis_cart.paraCORREGO(X, Y, Z)
+                                st.markdown('## Resultado')
+                                st.markdown("#### Latitude: {}° {}' {:.10f}''".format(lat_dms[0], lat_dms[1], lat_dms[2]) + '\n' +
+                                            "#### Longitude: {}° {}' {:.10f}''".format(lon_dms[0], lon_dms[1], lon_dms[2]) + '\n' +
+                                            "#### Altura: {:.4f} m".format(h))
 
     case 'Geodésico -> Cartesiano':
         # Qual o atual sistema da coordenada? OBS: SAD=1 WGS 84 EPSG:4326=2 SIRGAS 2000 EPSG:4674=3 CORREGO ALEGRE EPSG:4225=4: 
