@@ -32,23 +32,24 @@ def cart_to_geodetic(X, Y, Z, a, f):
     # Cálculos do elipsoide
     b = a * (1 - f)
     c = math.sqrt(a**2 - b**2)
-    e = c / a      # parâmetros auxiliares:
-    el = c / b
+    e_quadrado = (a**2 - b**2)/a**2      # parâmetros auxiliares:
+    el_quadrado = e_quadrado/(1-e_quadrado)
 
     # Projeção no plano XY
     p = math.sqrt(X**2 + Y**2)
     
-    # Cálculo intermediário (fórmula semelhante à de Bowring)
+    # Cálculo intermediário do teta
     theta = math.atan((Z * a) / (p * b))
     
     # Latitude em radianos
-    lat_rad = math.atan((Z + (el**2) * b * math.sin(theta)**3) /
-                        (p - (e**2) * a * math.cos(theta)**3))
+    lat_rad = math.atan((Z + (el_quadrado) * b * math.sin(theta)**3) /
+                        (p - (e_quadrado) * a * math.cos(theta)**3))
+    
     # Longitude em radianos (usa atan2 para o quadrante correto)
     lon_rad = math.atan2(Y, X)
     
     # Raio de curvatura da vertical
-    N = a / math.sqrt(1 - (e**2) * (math.sin(lat_rad)**2))
+    N = a / math.sqrt(1 - ((e_quadrado) * (math.sin(lat_rad)**2)))
     
     # Altura em relação ao elipsoide
     h = p / math.cos(lat_rad) - N

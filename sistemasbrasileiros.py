@@ -83,7 +83,7 @@ def paraSAD_69(X, Y, Z):
     senotheta = math.sin(theta)
     cossenotheta = math.cos(theta)
     lat1 = math.degrees(math.atan((Z + ((el ** 2) * b * (senotheta ** 3))) / (p - ( (e ** 2) * a * (cossenotheta ** 3)))))
-    lon1 = math.degrees(math.atan(Y / X))
+    lon1 = math.degrees(math.atan(math.radians(Y / X)))
     N = ((a) / math.sqrt(1 - ((e ** 2) * ((math.sin(lat1) ** 2)))))
     h1 = (p / (math.cos(math.radians(lat1)))) - N
     glat1 = int(lat1) # lat =40.123456, glat=40
