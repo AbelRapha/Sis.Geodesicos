@@ -1,12 +1,13 @@
 import streamlit as st
 import sistemasbrasileiros as sis
 import  sistemas_cartesianos_geodesicos as sis_cart
+import molodensky as mldsk
 
 
 ## Calculadora de Conversão de Sistemas
 st.markdown('## Calculadora de Conversão de Sistemas')
 
-tipo_calculo = st.selectbox('Escolha qual sistema você deseja realizar a conversão', ('Selecione','Cartesiano -> Geodésico', 'Geodésico -> Cartesiano'))
+tipo_calculo = st.selectbox('Escolha qual sistema você deseja realizar a conversão', ('Selecione','Cartesiano -> Geodésico', 'Geodésico -> Cartesiano', 'Geodésico -> Geodésico (Molodensky)'))
 
 match tipo_calculo:
     case 'Cartesiano -> Geodésico':
@@ -21,9 +22,9 @@ match tipo_calculo:
 
                 if sis2_value_text != 'Selecione':
 
-                    X = float(st.number_input("insira a Coordenada X: ", format="%0.9f"))
-                    Y = float(st.number_input("insira a Coordenada Y: ", format="%0.9f"))
-                    Z = float(st.number_input("insira a Coordenada Z: ", format="%0.9f"))
+                    X = float(st.number_input("insira a Coordenada X: ", format="%0.10f"))
+                    Y = float(st.number_input("insira a Coordenada Y: ", format="%0.10f"))
+                    Z = float(st.number_input("insira a Coordenada Z: ", format="%0.10f"))
 
                     botao_cart_to_geodetic = st.button('Converter')
 
@@ -247,9 +248,9 @@ match tipo_calculo:
 
                     if sistema == 2 and sistema2 == 3: # De WGS para SAD-69 cancela com a operação de SAD-69 para SIRGAS
                         result = sis.WGS84(lon, lat, h)
-                        X1 = result[0] 
-                        Y1 = result[1] 
-                        Z1 = result[2] 
+                        X1 = result[0] + 66.86
+                        Y1 = result[1] - 4.37
+                        Z1 = result[2] + 38.52
                         st.markdown('## Resultado')
                         st.markdown('#### X: '+str(X1)+'\n'+'#### Y: '+str(Y1)+'\n'+'#### Z: '+str(Z1))
                         
@@ -271,9 +272,9 @@ match tipo_calculo:
                         
                     if sistema == 3 and sistema2 == 2:
                         result = sis.SIRGAS(lon, lat, h)
-                        X1 = result[0]
-                        Y1 = result[1]
-                        Z1 = result[2]
+                        X1 = result[0] - 66.86
+                        Y1 = result[1] + 4.37
+                        Z1 = result[2] - 38.52
                         st.markdown('## Resultado')
                         st.markdown('#### X: '+str(X1)+'\n'+'#### Y: '+str(Y1)+'\n'+'#### Z: '+str(Z1))
                         
@@ -318,3 +319,95 @@ match tipo_calculo:
                         valor = sis.CORREGO(lon, lat, h)
                         st.markdown('## Resultado')
                         st.markdown('#### X: '+str(valor[0])+'\n'+'#### Y: '+str(valor[1])+'\n'+'#### Z: '+str(valor[2]))
+    case 'Geodésico -> Geodésico (Molodensky)':
+        # Entrada de dados
+        lat_text = st.text_input("Digite a latitude em GMS (graus, minutos, segundos) EX 22 33 56.8886:")
+        if lat_text:
+            try:
+                g, m, s = map(float, lat_text.split())
+                lat = mldsk.gms_para_decimal(g, m, s)
+            except:
+                st.warning('Coloque um valor de ângulo válido')
+        lon_text = st.text_input("Digite a longitude em GMS (graus, minutos, segundos)EX 22 33 56.8886:")
+        if lon_text:
+            try:
+                g, m, s = map(float, lon_text.split())
+                lon = mldsk.gms_para_decimal(g, m, s)
+            except:
+                st.warning('Coloque um valor de ângulo válido')
+        h_text = st.text_input("Digite a altura em metros EX 579.856: ")
+        if h_text:
+            try:
+                h = float(h_text)
+            except:
+                st.warning('Coloque um valor de altura válido')
+         # Qual o atual sistema da coordenada? 
+        sistema_origem = st.selectbox('Qual o atual sistema da coordenada?', ('Selecione','SAD-69','WGS-84','SIRGAS 2000','Córrego Alegre'))
+        
+        botao_calculo_molodensky = st.button('Calcular')
+
+        if sistema_origem and botao_calculo_molodensky:
+            # Transformação para cada sistema
+            match sistema_origem:
+                case 'SIRGAS 2000':
+                    for sistema, params in mldsk.sistemas_de_sirgas.items():
+                        if sistema != sistema_origem:  # Evita transformação para o mesmo sistema
+                            lat2, lon2, h2 = mldsk.molodensky(
+                                lat, lon, h,
+                                params["dX"], params["dY"], params["dZ"],
+                                mldsk.sistemas_de_sirgas[sistema_origem]["a"], mldsk.sistemas_de_sirgas[sistema_origem]["e2"],
+                                params["a"], params["e2"]
+                            )
+                            st.markdown(f"## Coordenadas no sistema {sistema}:")
+                            st.markdown(f"#### Latitude: {lat2:.8f}, Longitude: {lon2:.8f}, Altura: {h2:.2f}m\n")
+                            # Conversão para Graus Minutos e Segundos
+                            degree_lat, min_lat, sec_lat = sis_cart.decimal_to_dms(lat2)
+                            degree_lon, min_lon, sec_lon = sis_cart.decimal_to_dms(lon2)
+                            st.markdown(f"#### Latitude: {degree_lat}° {min_lat}' {sec_lat}'' , Longitude: {degree_lon}° {min_lon}' {sec_lon}'' , Altura: {h2:.2f}m\n")
+                case 'WGS-84':
+                    for sistema, params in mldsk.sistemas_de_wgs.items():
+                        if sistema != sistema_origem:  # Evita transformação para o mesmo sistema
+                            lat2, lon2, h2 = mldsk.molodensky(
+                                lat, lon, h,
+                                params["dX"], params["dY"], params["dZ"],
+                                mldsk.sistemas_de_wgs[sistema_origem]["a"], mldsk.sistemas_de_wgs[sistema_origem]["e2"],
+                                params["a"], params["e2"]
+                            )
+                            st.markdown(f"## Coordenadas no sistema {sistema}:")
+                            st.markdown(f"#### Latitude: {lat2:.8f}, Longitude: {lon2:.8f}, Altura: {h2:.2f}m\n")
+                            # Conversão para Graus Minutos e Segundos
+                            degree_lat, min_lat, sec_lat = sis_cart.decimal_to_dms(lat2)
+                            degree_lon, min_lon, sec_lon = sis_cart.decimal_to_dms(lon2)
+                            st.markdown(f"#### Latitude: {degree_lat}° {min_lat}' {sec_lat}'' , Longitude: {degree_lon}° {min_lon}' {sec_lon}'' , Altura: {h2:.2f}m\n")
+                case 'SAD-69':
+                    for sistema, params in mldsk.sistemas_de_sad.items():
+                        if sistema != sistema_origem:  # Evita transformação para o mesmo sistema
+                            lat2, lon2, h2 = mldsk.molodensky(
+                                lat, lon, h,
+                                params["dX"], params["dY"], params["dZ"],
+                                mldsk.sistemas_de_sad[sistema_origem]["a"], mldsk.sistemas_de_sad[sistema_origem]["e2"],
+                                params["a"], params["e2"]
+                            )
+                            st.markdown(f"## Coordenadas no sistema {sistema}:")
+                            st.markdown(f"#### Latitude: {lat2:.8f}, Longitude: {lon2:.8f}, Altura: {h2:.2f}m\n")
+                            # Conversão para Graus Minutos e Segundos
+                            degree_lat, min_lat, sec_lat = sis_cart.decimal_to_dms(lat2)
+                            degree_lon, min_lon, sec_lon = sis_cart.decimal_to_dms(lon2)
+                            st.markdown(f"#### Latitude: {degree_lat}° {min_lat}' {sec_lat}'' , Longitude: {degree_lon}° {min_lon}' {sec_lon}'' , Altura: {h2:.2f}m\n")
+                case 'Córrego Alegre':
+                    for sistema, params in mldsk.sistemas_de_corrego.items():
+                        if sistema != sistema_origem:  # Evita transformação para o mesmo sistema
+                            lat2, lon2, h2 = mldsk.molodensky(
+                                lat, lon, h,
+                                params["dX"], params["dY"], params["dZ"],
+                                mldsk.sistemas_de_corrego[sistema_origem]["a"], mldsk.sistemas_de_corrego[sistema_origem]["e2"],
+                                params["a"], params["e2"]
+                            )
+                            st.markdown(f"## Coordenadas no sistema {sistema}:")
+                            st.markdown(f"#### Latitude: {lat2:.8f}, Longitude: {lon2:.8f}, Altura: {h2:.2f}m\n")
+                            # Conversão para Graus Minutos e Segundos
+                            degree_lat, min_lat, sec_lat = sis_cart.decimal_to_dms(lat2)
+                            degree_lon, min_lon, sec_lon = sis_cart.decimal_to_dms(lon2)
+                            st.markdown(f"#### Latitude: {degree_lat}° {min_lat}' {sec_lat}'' , Longitude: {degree_lon}° {min_lon}' {sec_lon}'' , Altura: {h2:.2f}m\n")
+                case 'Selecione':
+                    st.warning("Selecione um modelo de origem")

@@ -5,14 +5,10 @@ def decimal_to_dms(angle):
     Converte um ângulo em graus (formato decimal) para uma tupla (graus, minutos, segundos).
     Os segundos são retornados com todas as casas decimais.
     """
-    # A parte inteira dos graus (pode ser negativa)
-    degrees_int = int(angle)
-    # Cálculo dos minutos (parte inteira dos minutos a partir do valor absoluto do resto)
-    remainder = abs(angle - degrees_int) * 60
-    minutes = int(remainder)
-    # O restante convertido para segundos (com todas as casas decimais)
-    seconds = (remainder - minutes) * 60
-    return (degrees_int, minutes, seconds)
+    graus = int(angle)
+    minutos = int(abs(angle - graus) * 60)
+    segundos = (abs(angle - graus) * 60 - minutos) * 60
+    return graus, minutos, segundos
 
 def cart_to_geodetic(X, Y, Z, a, f):
     """
@@ -31,7 +27,6 @@ def cart_to_geodetic(X, Y, Z, a, f):
     """
     # Cálculos do elipsoide
     b = a * (1 - f)
-    c = math.sqrt(a**2 - b**2)
     e_quadrado = (a**2 - b**2)/a**2      # parâmetros auxiliares:
     el_quadrado = e_quadrado/(1-e_quadrado)
 
@@ -52,7 +47,7 @@ def cart_to_geodetic(X, Y, Z, a, f):
     N = a / math.sqrt(1 - ((e_quadrado) * (math.sin(lat_rad)**2)))
     
     # Altura em relação ao elipsoide
-    h = p / math.cos(lat_rad) - N
+    h = (p / math.cos(lat_rad)) - N
 
     # Conversão para graus decimais
     lat_deg = math.degrees(lat_rad)

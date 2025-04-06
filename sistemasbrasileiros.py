@@ -23,7 +23,6 @@ def SAD_69(lon, lat, h):
     X = (p) * math.cos(lon)
     Y = (p) * math.sin(lon)
     Z = ((N * (1 - (e * e))) + h) * (math.sin(lat))
-    #print(" X: ", X, "\n Y: ", Y, "\n Z: ", Z)
     return (X, Y, Z)
 
 def WGS84(lon, lat, h):
@@ -38,7 +37,6 @@ def WGS84(lon, lat, h):
     X = (p) * math.cos(lon)
     Y = (p) * math.sin(lon)
     Z = ((N * (1 - (e * e))) + h) * (math.sin(lat))
-    #print(" X: ", X, "\n Y: ", Y, "\n Z: ", Z)
     return (X, Y, Z)
 
 def SIRGAS(lon, lat, h):
@@ -53,7 +51,6 @@ def SIRGAS(lon, lat, h):
     X = (p) * math.cos(lon)
     Y = (p) * math.sin(lon)
     Z = ((N * (1 - (e * e))) + h) * (math.sin(lat))
-    #print(" X: ", X, "\n Y: ", Y, "\n Z: ", Z)
     return(X, Y, Z)
 
 def CORREGO(lon, lat, h):
@@ -68,7 +65,6 @@ def CORREGO(lon, lat, h):
     X = (p) * math.cos(lon)
     Y = (p) * math.sin(lon)
     Z = ((N * (1 - (e * e))) + h) * (math.sin(lat))
-    #print(" X: ", X, "\n Y: ", Y, "\n Z: ", Z)
     return (X, Y, Z)
 
 def paraSAD_69(X, Y, Z):
@@ -83,17 +79,9 @@ def paraSAD_69(X, Y, Z):
     senotheta = math.sin(theta)
     cossenotheta = math.cos(theta)
     lat1 = math.degrees(math.atan((Z + ((el ** 2) * b * (senotheta ** 3))) / (p - ( (e ** 2) * a * (cossenotheta ** 3)))))
-    lon1 = math.degrees(math.atan(math.radians(Y / X)))
-    N = ((a) / math.sqrt(1 - ((e ** 2) * ((math.sin(lat1) ** 2)))))
+    lon1 = math.degrees(math.atan(Y / X))
+    N = ((a) / math.sqrt(1 - ((e ** 2) * ((math.sin(math.radians(lat1)) ** 2)))))
     h1 = (p / (math.cos(math.radians(lat1)))) - N
-    glat1 = int(lat1) # lat =40.123456, glat=40
-    minlat1 = int((lat1 - (glat1)) * 60)  # (40.123456-40) * 60 = 0.123456 * 60 = 7.40736, minlat = 7
-    seglat1 = ((((lat1 - glat1) * 60) - minlat1) * 60) # (((40.123456 - 40) * 60 ) - 7) * 60))  = 
-    glon1 = int(lon1)
-    minlon1 = int((lon1 - (glon1)) * 60)
-    seglon1 = ((((lon1 - glon1) * 60) - minlon1) * 60)
-    
-    #print("Latitude: ", glat1,"° ", abs(minlat1), "' ", abs(seglat1),"'' ",  " \nLongitude: ", glon1,"° ", abs(minlon1), "' ", abs(seglon1),"'' ", "\nAltura: ", h1)
     return (lat1, lon1, h1)
     
 def paraWGS84(X, Y, Z):
@@ -109,16 +97,8 @@ def paraWGS84(X, Y, Z):
     cossenotheta = math.cos(theta)
     lat1 = math.degrees(math.atan((Z + ((el ** 2) * b * (senotheta ** 3))) / (p - ( (e ** 2) * a * (cossenotheta ** 3)))))
     lon1 = math.degrees(math.atan(Y / X))
-    N = ((a) / math.sqrt(1 - ((e ** 2) * ((math.sin(lat1) ** 2)))))
+    N = ((a) / math.sqrt(1 - ((e ** 2) * ((math.sin(math.radians(lat1)) ** 2)))))
     h1 = (p / (math.cos(math.radians(lat1)))) - N
-    glat1 = int(lat1) # lat =40.123456, glat=40
-    minlat1 = int((lat1 - (glat1)) * 60)  # (40.123456-40) * 60 = 0.123456 * 60 = 7.40736, minlat = 7
-    seglat1 = ((((lat1 - glat1) * 60) - minlat1) * 60) # (((40.123456 - 40) * 60 ) - 7) * 60))  = 
-    glon1 = int(lon1)
-    minlon1 = int((lon1 - (glon1)) * 60)
-    seglon1 = ((((lon1 - glon1) * 60) - minlon1) * 60)
-    
-    #print("Latitude: ", glat1,"° ", abs(minlat1), "' ", abs(seglat1),"'' ",  " \nLongitude: ", glon1,"° ", abs(minlon1), "' ", abs(seglon1),"'' ", "\nAltura: ", h1)
     return (lat1, lon1, h1)
 
 def paraSIRGAS(X, Y, Z):
@@ -134,16 +114,8 @@ def paraSIRGAS(X, Y, Z):
     cossenotheta = math.cos(theta)
     lat1 = math.degrees(math.atan((Z + ((el ** 2) * b * (senotheta ** 3))) / (p - ( (e ** 2) * a * (cossenotheta ** 3)))))
     lon1 = math.degrees(math.atan(Y / X))
-    N = ((a) / math.sqrt(1 - ((e ** 2) * ((math.sin(lat1) ** 2)))))
+    N = ((a) / math.sqrt(1 - ((e ** 2) * ((math.sin(math.radians(lat1)) ** 2)))))
     h1 = (p / (math.cos(math.radians(lat1)))) - N
-    glat1 = int(lat1) # lat =40.123456, glat=40
-    minlat1 = int((lat1 - (glat1)) * 60)  # (40.123456-40) * 60 = 0.123456 * 60 = 7.40736, minlat = 7
-    seglat1 = ((((lat1 - glat1) * 60) - minlat1) * 60) # (((40.123456 - 40) * 60 ) - 7) * 60))  = 
-    glon1 = int(lon1)
-    minlon1 = int((lon1 - (glon1)) * 60)
-    seglon1 = ((((lon1 - glon1) * 60) - minlon1) * 60)
-    
-    #print("Latitude: ", glat1,"° ", abs(minlat1), "' ", abs(seglat1),"'' ",  " \nLongitude: ", glon1,"° ", abs(minlon1), "' ", abs(seglon1),"'' ", "\nAltura: ", h1)
     return (lat1, lon1, h1)
 
 def paraCORREGO(X, Y, Z):
@@ -159,14 +131,6 @@ def paraCORREGO(X, Y, Z):
     cossenotheta = math.cos(theta)
     lat1 = math.degrees(math.atan((Z + ((el ** 2) * b * (senotheta ** 3))) / (p - ( (e ** 2) * a * (cossenotheta ** 3)))))
     lon1 = math.degrees(math.atan(Y / X))
-    N = ((a) / math.sqrt(1 - ((e ** 2) * ((math.sin(lat1) ** 2)))))
+    N = ((a) / math.sqrt(1 - ((e ** 2) * ((math.sin(math.radians(lat1)) ** 2)))))
     h1 = (p / (math.cos(math.radians(lat1)))) - N
-    glat1 = int(lat1) # lat =40.123456, glat=40
-    minlat1 = int((lat1 - (glat1)) * 60)  # (40.123456-40) * 60 = 0.123456 * 60 = 7.40736, minlat = 7
-    seglat1 = ((((lat1 - glat1) * 60) - minlat1) * 60) # (((40.123456 - 40) * 60 ) - 7) * 60))  = 
-    glon1 = int(lon1)
-    minlon1 = int((lon1 - (glon1)) * 60)
-    seglon1 = ((((lon1 - glon1) * 60) - minlon1) * 60)
-    
-    #print("Latitude: ", glat1,"° ", abs(minlat1), "' ", abs(seglat1),"'' ",  " \nLongitude: ", glon1,"° ", abs(minlon1), "' ", abs(seglon1),"'' ", "\nAltura: ", h1)
     return (lat1, lon1, h1)

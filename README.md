@@ -8,5 +8,12 @@ Este programa tem como finalidade converter coordenadas entre sistemas geodésic
  - SIRGAS 2000
 
 ## Transformações possíveis:
-- Geodésico => Cartesiano
-- Cartesiano => Geodésico
+- ### Geodésico => Cartesiano
+    ![Exemplo](./img/Gif_Geodesic_to_Cart.gif)
+- ### Cartesiano => Geodésico
+    ![Exemplo](./img/Gif_Cart_to_Geodesic.gif)
+- ### Geodésico => Geodésico (Molodensky)
+    ![Exemplo](./img/Gif_Molodensky.gif)
+
+## Link da aplicação online:
+- [Link do Projeto](https://sisgeodesicos-brasileiros.streamlit.app/)
