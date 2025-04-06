@@ -1,5 +1,5 @@
 # Conversão entre sistemas geodésicos brasileiros
-Este programa tem como finalidade converter coordenadas entre sistemas geodésicos brasileiros
+Este programa tem como finalidade converter coordenadas entre sistemas geodésicos brasileiros ou internacionais
 
 ## Sistemas Disponíveis para conversão:
  - SAD-69
