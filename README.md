@@ -16,4 +16,5 @@ Este programa tem como finalidade converter coordenadas entre sistemas geodésic
     ![Exemplo](./img/Gif_Molodensky.gif)
 
 ## Link da aplicação online:
-- [Link do Projeto](https://sisgeodesicos-brasileiros.streamlit.app/)
+- ### Para inicializar o uso do aplicativo [Link do Projeto](https://sisgeodesicos-brasileiros.streamlit.app/)
+    ![Imagem](./img/Gif_Inicializar_site.gif)
